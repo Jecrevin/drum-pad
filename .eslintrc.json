@@ -15,14 +15,7 @@
         "react"
     ],
     "rules": {
-        "max-len": [
-            "error",
-            {
-                "code": 80,
-                "ignoreTrailingComments": true,
-                "ignoreUrls": true
-            }
-        ]
+        "max-len": "error"
     },
     "ignorePatterns": [
         "*.config.js"
