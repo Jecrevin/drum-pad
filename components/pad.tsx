@@ -15,6 +15,8 @@ export default function Pad ({
   isOn: boolean
   setDisplay: React.Dispatch<React.SetStateAction<string>>
 }): React.JSX.Element {
+  /** To play the sound and change the style of `button` when clicking the
+   * `button` representing drum pad. */
   function handleClick (e: FormEvent<HTMLButtonElement>): void {
     const target = e.target as HTMLButtonElement
     const audio = target.children.item(0) as HTMLAudioElement
