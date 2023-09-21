@@ -19,7 +19,9 @@ const config: Config = {
         drum: '400px',
         keyboard: '300px',
         display: '2.5rem',
-        power: '25px'
+        volume: '5px',
+        power: '25px',
+        bar: '20px'
       },
       spacing: {
         pad: '5rem'
