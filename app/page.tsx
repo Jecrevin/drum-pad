@@ -8,10 +8,14 @@ import Power from '@/components/power'
 import VolumeBar from '@/components/volumeBar'
 
 export default function Home (): React.JSX.Element {
+  // An variable shows if the drum turns on.
   const [isOn, setIsOn] = useState(true)
+  // The content to display.
   const [display, setDisplay] = useState('')
+  // The current volume of pad drum.
   const [volume, setVolume] = useState(1.0)
 
+  // Add an event listener to beat the drum when the corresponding key is down.
   useEffect(() => {
     document.addEventListener('keydown', (e: KeyboardEvent) => {
       const key = e.key
@@ -27,6 +31,8 @@ export default function Home (): React.JSX.Element {
     })
   }, [])
 
+  /** Change the volume of every `audio` element when the drum pad's volume
+   * changing. */
   useEffect(() => {
     const pads = document.querySelectorAll<HTMLButtonElement>('.drum-pad')
     for (const pad of pads.values()) {
@@ -36,22 +42,24 @@ export default function Home (): React.JSX.Element {
   }, [volume])
 
   return (
-      <main id='drum-machine' className='w-drum h-drum border-4 border-drum
-      bg-gray-500 flex items-center justify-evenly'>
+      <main id='drum-machine' className='md:w-drum md:h-drum w-3/5
+      p-10 border-4 border-drum bg-gray-500 flex flex-wrap items-center
+      justify-evenly'>
         <div id='keyboard' className='w-keyboard h-keyboard grid grid-cols-3
         justify-items-center items-center'>
           { sounds.map(obj =>
           <Pad key={obj.name} name={obj.name} source={obj.src} isOn={isOn}
           setDisplay={setDisplay}>{obj.key}</Pad>) }
         </div>
-        <div id='pannel' className='h-full flex flex-col justify-evenly
-        items-center'>
+        <div id='pannel' className='md:h-full h-[300px] flex flex-col
+        justify-evenly items-center'>
           <Power isOn={isOn} onClick={() => {
             setDisplay('')
             setIsOn(!isOn)
           }} />
           <Display>{display}</Display>
-          <VolumeBar setVolume={setVolume} setDisplay={setDisplay} />
+          <VolumeBar setVolume={setVolume} setDisplay={setDisplay}
+          isOn={isOn} />
         </div>
       </main>
   )

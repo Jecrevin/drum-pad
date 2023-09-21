@@ -5,7 +5,7 @@ export default function Display ({ children }: {
 }): React.JSX.Element {
   return (
     <div className='w-display h-display bg-neutral-400 text-center flex
-    justify-center items-center'>
+    justify-center items-center shadow-[0_0_5px_rgba(0,0,0,0.5)]' id='display'>
       <p>{children}</p>
     </div>
   )

@@ -4,32 +4,38 @@
 import React, { useEffect, useState } from 'react'
 
 export default function VolumeBar ({
+  isOn,
   setVolume,
   setDisplay
 }: {
+  isOn: boolean
   setVolume: React.Dispatch<React.SetStateAction<number>>
   setDisplay: React.Dispatch<React.SetStateAction<string>>
 }): React.JSX.Element {
+  // An variable shows if the volume will be changed by slide the volume bar.
   const [mouseDown, setMouseDown] = useState(false)
-  let displayTask: NodeJS.Timeout
+  /** To show the current volume on `Display`. Usefull when changing the volume
+   * frequently */
+  const [displayTask, setDisplayTask] = useState<NodeJS.Timeout>()
 
   useEffect(() => {
-    window.addEventListener('mouseup', () => {
-      setMouseDown(false)
-    })
+    window.addEventListener('mouseup', () => { setMouseDown(false) })
   }, [])
 
+  /** When the mouse is pressed, making the volume can be continuously changed
+   * when slide the bar. To avoid permanently changing the volume, remove the
+   * `event listener` when the mouse is released. */
   useEffect(() => {
     if (mouseDown) { window.addEventListener('mousemove', changeVolume) }
     return () => { window.removeEventListener('mousemove', changeVolume) }
   }, [mouseDown])
 
+  /** A function that realy do the part of changing the volume and the position
+   * of slide bar. */
   function changeVolume (e: MouseEvent | React.MouseEvent): void {
-    console.log(displayTask)
-    if (displayTask != null) {
-      console.log('clearing time out!')
-      clearTimeout(displayTask)
-    }
+    if (!isOn) return
+    if (displayTask !== undefined) clearTimeout(displayTask)
+
     const bar = document.getElementById('volume-bar')!
     const barRect = bar.getBoundingClientRect()
     const slider = bar.firstElementChild as HTMLElement
@@ -41,8 +47,7 @@ export default function VolumeBar ({
     const volume = parseFloat(((pos - barRect.left) / barRect.width).toFixed(2))
     setVolume(volume)
     setDisplay(`Volume: ${Math.ceil(volume * 100)}%`)
-    displayTask = setTimeout(() => { setDisplay('') }, 1000)
-    console.log(displayTask)
+    setDisplayTask(setTimeout(() => { setDisplay('') }, 2000))
   }
 
   return (
